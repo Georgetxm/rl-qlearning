@@ -2,6 +2,7 @@ import pygame
 import random
 from enum import Enum
 from collections import namedtuple
+import math
 import numpy as np
 
 pygame.init()
@@ -26,7 +27,7 @@ GREEN2 = (61, 87, 14)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
-SPEED = 10000
+SPEED = 100000
 
 
 class SnakeGameAI:
@@ -80,6 +81,8 @@ class SnakeGameAI:
             game_over = True
             reward = -10
             return reward, game_over, self.score
+        else:
+            reward += 0.1  # reward for survival
 
         # 4. place new food or just move
         if self.head == self.food:
@@ -92,7 +95,11 @@ class SnakeGameAI:
         # 5. update ui and clock
         self._update_ui()
         self.clock.tick(SPEED)
-        # 6. return game over and score
+
+        # 6. Survival bonus reward based on snake length (long-term goal)
+        reward += self.score * 0.1  # Bonus based on current length
+
+        # 7. return game over and score
         return reward, game_over, self.score
 
     def is_collision(self, point=None):

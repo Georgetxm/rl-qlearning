@@ -11,16 +11,11 @@ class Linear_QNet(nn.Module):
         self.loaded_model = False
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
-
-        if os.path.exists('./model/model_256_1hidden.pth'):
-            self.load_state_dict(torch.load('model/model_256_1hidden.pth'))
-            self.loaded_model = True
-            print('Model loaded')
-        else:
-            print('Model not found, starting from scratch')
+        # self.linear3 = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
+        # x = F.relu(self.linear2(x))
         x = self.linear2(x)
         return x
 
